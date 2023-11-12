@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yandex OAuth</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #email-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Yandex OAuth 示例</h1>
+
+    <div id="email-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 提取 URL 中的授权码
+            const urlParams = new URLSearchParams(window.location.search);
+            const authorizationCode = urlParams.get('code');
+
+            if (authorizationCode) {
+                // 使用提取的授权码向 Yandex 请求访问令牌
+                fetch('https://oauth.yandex.com/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `grant_type=authorization_code&code=${authorizationCode}&client_id=b63d1049548943dba0bc915ccf961e13&client_secret=843bacc6aeb244a7a79bab7ae69ed710`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const accessToken = data.access_token;
+
+                    // 使用访问令牌调用 Yandex API 获取用户信息
+                    fetch('https://login.yandex.ru/info?format=json', {
+                        headers: {
+                            'Authorization': `OAuth ${accessToken}`
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(userData => {
+                        // 显示用户邮箱信息
+                        document.getElementById('email-container').innerText = `用户邮箱：${userData.default_email}`;
+                    })
+                    .catch(error => {
+                        console.error('获取用户信息时发生错误：', error);
+                    });
+                })
+                .catch(error => {
+                    console.error('获取访问令牌时发生错误：', error);
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
