@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>获取URL参数</title>
+    <script>
+        // 获取URL参数的函数
+        function getUrlParameter(name) {
+            name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        // 在页面加载时获取参数并显示
+        document.addEventListener('DOMContentLoaded', function () {
+            // 通过参数名获取参数值
+            var paramValue = getUrlParameter('code');
+
+            // 显示在页面上
+            document.getElementById('result').innerHTML = paramValue;
+        });
+    </script>
+</head>
+<body>
+    <h1>验证码：</h1>
+    <p id="result"></p>
+</body>
+</html>
+
