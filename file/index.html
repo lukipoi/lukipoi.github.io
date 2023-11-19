@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件区</title>
+</head>
+<body>
+
+<h1>文件站索引</h1>
+
+<ul>
+    <?php
+    $directory = './'; // 替换为你想要展示的文件目录路径
+
+    // 检查目录是否存在并可读
+    if (is_dir($directory) && is_readable($directory)) {
+        // 打开目录
+        if ($handle = opendir($directory)) {
+            // 循环遍历目录中的文件
+            while (($file = readdir($handle)) !== false) {
+                if ($file != "." && $file != "..") {
+                    echo "<li><a href='$directory/$file' download>$file</a></li>";
+                }
+            }
+            closedir($handle);
+        }
+    } else {
+        echo "<p>无法访问文件目录</p>";
+    }
+    ?>
+</ul>
+
+</body>
+</html>
