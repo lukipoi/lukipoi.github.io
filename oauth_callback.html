@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Get Parameters</title>
+</head>
+<body>
+    <h1>URL Parameters:</h1>
+    <ul id="params"></ul>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const paramsList = document.getElementById('params');
+        params.forEach((value, key) => {
+            const listItem = document.createElement('LI');
+            listItem.textContent = `${key}: ${value}`;
+            paramsList.appendChild(listItem);
+        });
+    </script>
+</body>
+</html>
